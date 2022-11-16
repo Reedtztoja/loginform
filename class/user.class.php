@@ -12,11 +12,14 @@ class User {
         $this->login = $login;
         $this->password_hash = password_hash($password, PASSWORD_ARGON2I);
         global $db;
-        $this->
+        $this->db = &$db;
     }
     
     public function isAuth() : bool {
-
+        if(isset($this->id) && $this->id !=null)
+            return true;
+        else
+            return false;
     }
     public function login() {
         global $db;
