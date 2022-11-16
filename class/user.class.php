@@ -27,12 +27,14 @@ class User {
         $preparedQuery->bind_param('s', $this->login);
         $preparedQuery->execute();
         $result = $preparedQuery->get_result();
-        $row = $result->fetch_assoc();
-        if(password_verify($this->password, $row['password'])) {
-            $this->id = $row['id'];
-            $this->firstName = $row['firstName'];
-            $this->lastName = $row['lastName'];
+        if($result->num_rows == 1) {
+            $row = $result->fetch_assoc();
+            if(password_verify($this->password, $row['password'])) {
+                $this->id = $row['id'];
+                $this->firstName = $row['firstName'];
+                $this->lastName = $row['lastName']; 
         }
+    }
     }
     public function logout() {
         
@@ -40,7 +42,11 @@ class User {
     public function register() {
         $query = "INSERT INTO user VALUES (NULL, ?, ?, ?, ?)";
         $preparedQuery = $this->db->prepare($query);
-        $passwordHash = password_hash($this->password, PASSWORD_ARGON2I);
+        $password_hash = password_hash($this->password, PASSWORD_ARGON2I);
+        if(!isset($this->firstName))
+            $this->firstName = "";
+        if(!isset($this->lastName))
+            $this->lastName = "";
         $preparedQuery->bind_param('ssss', $this->login, $password_hash, $this->firstName, $this->lastName);
         $preparedQuery->execute();
     }
