@@ -3,14 +3,14 @@ class User {
     private $db;
     private int $id;
     private string $login;
-    private string $passwordHash;
+    private string $password;
     private string $firstName;
     private string $lastName;
 
     public function __construct(string $login, string $password) 
     {
         $this->login = $login;
-        $this->password_hash = password_hash($password, PASSWORD_ARGON2I);
+        $this->password = $password;
         global $db;
         $this->db = &$db;
     }
@@ -27,12 +27,22 @@ class User {
         $preparedQuery->bind_param('s', $this->login);
         $preparedQuery->execute();
         $result = $preparedQuery->get_result();
+        $row = $result->fetch_assoc();
+        if(password_verify($this->password, $row['password'])) {
+            $this->id = $row['id'];
+            $this->firstName = $row['firstName'];
+            $this->lastName = $row['lastName'];
+        }
     }
     public function logout() {
         
     }
     public function register() {
-        
+        $query = "INSERT INTO user VALUES (NULL, ?, ?, ?, ?)";
+        $preparedQuery = $this->db->prepare($query);
+        $passwordHash = password_hash($this->password, PASSWORD_ARGON2I);
+        $preparedQuery->bind_param('ssss', $this->login, $password_hash, $this->firstName, $this->lastName);
+        $preparedQuery->execute();
     }
 }
 ?>
