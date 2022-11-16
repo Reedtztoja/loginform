@@ -22,13 +22,17 @@ class User {
             return false;
     }
     public function login() {
-        global $db;
+        $query = "SELECT + FROM user WHERE login = ? LIMIT 1";
+        $preparedQuery = $this->db->prepare($query);
+        $preparedQuery->bind_param('s', $this->login);
+        $preparedQuery->execute();
+        $result = $preparedQuery->get_result();
     }
     public function logout() {
-        global $db;
+        
     }
     public function register() {
-        global $db;
+        
     }
 }
 ?>
