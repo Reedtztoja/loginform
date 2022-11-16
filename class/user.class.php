@@ -22,7 +22,7 @@ class User {
             return false;
     }
     public function login() {
-        $query = "SELECT + FROM user WHERE login = ? LIMIT 1";
+        $query = "SELECT * FROM user WHERE login = ? LIMIT 1";
         $preparedQuery = $this->db->prepare($query);
         $preparedQuery->bind_param('s', $this->login);
         $preparedQuery->execute();
@@ -30,7 +30,7 @@ class User {
         if($result->num_rows == 1) {
             $row = $result->fetch_assoc();
             if(password_verify($this->password, $row['password'])) {
-                $this->id = $row['id'];
+                $this->id = $row['ID'];
                 $this->firstName = $row['firstName'];
                 $this->lastName = $row['lastName']; 
         }
