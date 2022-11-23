@@ -1,6 +1,11 @@
 <?php
 require_once('vendor/autoload.php');
 require('class/User.class.php');
+$loader = new \Twig\Loader\ArrayLoader([
+    'index' => "Hello {{name}}!",
+]);
+$twig = new \Twig\Environment($loader);
+echo $twig->render('index', ['name' => 'Patryk']);
 
 $db = new mysqli('localhost', 'root', '', 'loginForm');
 $user = new User("jkowalski","tajnehaslo");
