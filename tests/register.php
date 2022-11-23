@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Logowanie</title>
+    <title>Rejestrowanie</title>
 </head>
 
 <body>
@@ -38,7 +38,7 @@
             <label for="passwordID">Hasło:</label><br>
             <input type="password" name="password" id="passwordID"><br>
             <label for="firstNameID">Imię:</label><br>
-            <input type="password" name="firstName" id="firstNameID"><br>
+            <input type="firstName" name="firstName" id="firstNameID"><br>
             <label for="lastNameID">Nazwisko:</label><br>
             <input type="lastName" name="lastName" id="lastNameID"><br>
             <input type="submit" value="Zarejestruj">
