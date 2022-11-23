@@ -1,4 +1,5 @@
 <?php
+require_once('vendor/autoload.php');
 require('class/User.class.php');
 
 $db = new mysqli('localhost', 'root', '', 'loginForm');
