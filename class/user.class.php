@@ -21,34 +21,46 @@ class User {
         else
             return false;
     }
-    public function login() {
+    public function register() : bool {
+        $passwordHash = password_hash($this->password, PASSWORD_ARGON2I);
+        $query = "INSERT INTO user VALUES (NULL, ?, ?, ?, ?)";
+        $preparedQuery = $this->db->prepare($query); 
+        $preparedQuery->bind_param('ssss', $this->login, $passwordHash, 
+                                            $this->firstName, $this->lastName);
+        $result = $preparedQuery->execute();
+        return $result;
+    }
+
+    public function login() : bool {
         $query = "SELECT * FROM user WHERE login = ? LIMIT 1";
-        $preparedQuery = $this->db->prepare($query);
+        $preparedQuery = $this->db->prepare($query); 
         $preparedQuery->bind_param('s', $this->login);
         $preparedQuery->execute();
         $result = $preparedQuery->get_result();
         if($result->num_rows == 1) {
             $row = $result->fetch_assoc();
-            if(password_verify($this->password, $row['password'])) {
-                $this->id = $row['ID'];
+            $passwordHash = $row['password'];
+            if(password_verify($this->password, $passwordHash)) {
+                $this->id = $row['id'];
                 $this->firstName = $row['firstName'];
-                $this->lastName = $row['lastName']; 
+                $this->lastName = $row['lastName'];
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
         }
     }
+
+    public function setfirstName(string $firstName) {
+        $this->firstName = $firstName;
     }
-    public function logout() {
-        
+    public function setlastName(string $lastName) {
+        $this->lastName = $lastName;
     }
-    public function register() {
-        $query = "INSERT INTO user VALUES (NULL, ?, ?, ?, ?)";
-        $preparedQuery = $this->db->prepare($query);
-        $password_hash = password_hash($this->password, PASSWORD_ARGON2I);
-        if(!isset($this->firstName))
-            $this->firstName = "";
-        if(!isset($this->lastName))
-            $this->lastName = "";
-        $preparedQuery->bind_param('ssss', $this->login, $password_hash, $this->firstName, $this->lastName);
-        $preparedQuery->execute();
+    public function getName() : string {
+        return $this->firstName . " " . $this->lastName;
     }
 }
 ?>

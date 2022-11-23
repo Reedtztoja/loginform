@@ -6,9 +6,10 @@
             $user = new User($_REQUEST['login'], $_REQUEST['password']);
             $user->login();
             if($user->isAuth()) {
-                echo "Zalogowano poprawnie";
+                $message =  "Zalogowano poprawnie".$user->getName();
             } else {
-                echo "Błąd logowania";
+                //echo "Błąd logowania";
+                $twig->display("message.html.twig", ['message' => "Błędny login lub hasło"]);
             }
         } else {
             $twig->display("login.html.twig");
