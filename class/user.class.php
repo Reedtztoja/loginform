@@ -11,16 +11,18 @@ class User {
     {
         $this->login = $login;
         $this->password = $password;
+        $this->firstName = "";
+        $this->lastName = "";
         global $db;
         $this->db = &$db;
     }
     
-    public function isAuth() : bool {
+    /*public function isAuth() : bool {
         if(isset($this->id) && $this->id !=null)
             return true;
         else
             return false;
-    }
+    }*/
     public function register() : bool {
         $passwordHash = password_hash($this->password, PASSWORD_ARGON2I);
         $query = "INSERT INTO user VALUES (NULL, ?, ?, ?, ?)";
@@ -41,7 +43,7 @@ class User {
             $row = $result->fetch_assoc();
             $passwordHash = $row['password'];
             if(password_verify($this->password, $passwordHash)) {
-                $this->id = $row['id'];
+                $this->id = $row['ID'];
                 $this->firstName = $row['firstName'];
                 $this->lastName = $row['lastName'];
                 return true;

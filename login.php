@@ -2,16 +2,19 @@
         require_once('config.php');
         
         if(isset($_REQUEST['login']) && isset($_REQUEST['password'])) {
-            $db = new mysqli('localhost', 'root', '', 'loginForm');
+
             $user = new User($_REQUEST['login'], $_REQUEST['password']);
-            $user->login();
-            if($user->isAuth()) {
-                $message =  "Zalogowano poprawnie".$user->getName();
+            if ($user->login()) {
+                $v = array(
+                    'message' => "Zalogowano poprawnie użytkownika: ".$user->getName(),
+                );
+                $twig->display('message.html.twig', $v);
             } else {
-                //echo "Błąd logowania";
-                $twig->display("message.html.twig", ['message' => "Błędny login lub hasło"]);
+                $twig->display('message.html.twig',
+                    ['message' => "Błędny login lub hasło"]);
             }
-        } else {
-            $twig->display("login.html.twig");
-        }
+        }   else {
+            $twig->display('login.html.twig');
+        }  
+
 ?>
