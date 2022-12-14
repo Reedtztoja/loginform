@@ -16,6 +16,28 @@ class User {
         global $db;
         $this->db = &$db;
     }
+
+    public function  __serialize(): array
+    {
+        return array(   
+                        'id' => $this->id,
+                        'login' => $this->login,
+                        'password' => $this->password,
+                        'firstName' => $this->firstName,
+                        'lastName' => $this->lastName,
+                    );
+    }
+
+    public function __unserialize(array $data): void
+    {
+        $this->id = $data['id'];
+        $this->login = $data['login'];
+        $this->password = $data['password'];
+        $this->firstName = $data['firstName'];
+        $this->lastName = $data['lastName'];
+        global $db;
+        $this->db = &$db;
+    }
     
     /*public function isAuth() : bool {
         if(isset($this->id) && $this->id !=null)
@@ -63,6 +85,16 @@ class User {
     }
     public function getName() : string {
         return $this->firstName . " " . $this->lastName;
+    }
+
+    public function save() : bool {
+        $q = "UPDATE user SET
+                firstName = ?,
+                lastName = ?
+                WHERE id = ?";
+        $preparedQuery = $this->db->prepare($q);
+        $preparedQuery->bind_param("ssi", $this->firstName, $this->lastName, $this->id);
+        return $preparedQuery->execute();
     }
 }
 ?>
