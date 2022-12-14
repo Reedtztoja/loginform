@@ -20,7 +20,7 @@ class User {
     public function  __serialize(): array
     {
         return array(   
-                        'id' => $this->id,
+                        'ID' => $this->ID,
                         'login' => $this->login,
                         'password' => $this->password,
                         'firstName' => $this->firstName,
@@ -30,7 +30,7 @@ class User {
 
     public function __unserialize(array $data): void
     {
-        $this->id = $data['id'];
+        $this->ID = $data['ID'];
         $this->login = $data['login'];
         $this->password = $data['password'];
         $this->firstName = $data['firstName'];
@@ -91,9 +91,9 @@ class User {
         $q = "UPDATE user SET
                 firstName = ?,
                 lastName = ?
-                WHERE id = ?";
+                WHERE ID = ?";
         $preparedQuery = $this->db->prepare($q);
-        $preparedQuery->bind_param("ssi", $this->firstName, $this->lastName, $this->id);
+        $preparedQuery->bind_param("ssi", $this->firstName, $this->lastName, $this->ID);
         return $preparedQuery->execute();
     }
 }
