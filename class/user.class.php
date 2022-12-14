@@ -4,6 +4,7 @@ class User {
     private int $ID;
     private string $login;
     private string $password;
+    private string $newPassword;
     private string $firstName;
     private string $lastName;
 
@@ -94,6 +95,15 @@ class User {
                 WHERE ID = ?";
         $preparedQuery = $this->db->prepare($q);
         $preparedQuery->bind_param("ssi", $this->firstName, $this->lastName, $this->ID);
+        return $preparedQuery->execute();
+    }
+    public function changePassword(string $newPassword) : bool {
+        $this->password_hash = password_hash($newPassword, PASSWORD_ARGON2I);
+        $q = "UPDATE user SET
+                password = ?
+                WHERE ID = ?";
+        $preparedQuery = $this->db->prepare($q);
+        $preparedQuery->bind_param("si", $this->password_hash, $this->ID);
         return $preparedQuery->execute();
     }
 }
